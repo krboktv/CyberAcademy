@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dapp</title>
+</head>
+<style>
+    .block-main {
+        margin: 20px;
+    }
+
+    .block-address {
+        border: 0.5px solid black;
+        padding: 10px;
+        background-color: whitesmoke;
+        margin-top: 30px;
+    }
+</style>
+<body>
+    <div class="block-main">
+        <div class="block-address">
+            <p>Source currency: <span id="token-from"></span></p>
+            <p>Address: <span id="token-address-from"></span></p>
+            <p>Amount: <span id="token-amount-from"></span></p>
+        </div>
+        <div class="block-address">
+            <p>Destination currency: <span id="token-to"></span></p>
+            <p>Address: <span id="token-address-to"></span></p>
+            <p>Amount: <span id="token-amount-to"></span></p>
+        </div>
+        <br>
+        <label fro="private-key">Enter your private key</label>
+        <input type="text" id="private-key" placeholder="Private Key" size="100px">
+        <button onclick="exchange()">Exchange</button>
+        <p id="tx-hash"></p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="../js/lib/bignumber.min.js"></script>
+    <script src="../js/lib/keythereum.min.js"></script>
+    <script src="../js/lib/ethereumjs-tx.js"></script>
+    <script src="../js/lib/web3.min.js"></script>
+    <script src="../js/contractData.js"></script>
+    <script src="../js/blockchain.js"></script>
+    <script src="../js/exchange/index.js"></script>
+</body>
+</html>

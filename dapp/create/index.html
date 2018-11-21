@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account</title>
+</head>
+<style>
+    .block-main {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        overflow: auto;
+    }
+
+    button {
+        height: 100px;
+        width: 200px;
+        font-size: 1.1em;
+        border-radius: 50px;
+    }
+    
+    #account {
+        text-align: center;
+    }
+</style>
+<body>
+    <div class="block-main">
+        <div id="account">
+            <div>
+                <button onclick="createAccount()"><b>Create Account</b></button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="../js/lib/bignumber.min.js"></script>
+    <script src="../js/lib/keythereum.min.js"></script>
+    <script src="../js/lib/ethereumjs-tx.js"></script>
+    <script src="../js/lib/web3.min.js"></script>
+    <script src="../js/contractData.js"></script>
+    <script src="../js/blockchain.js"></script>
+    <script src="../js/create/index.js"></script>
+</body>
+</html>
