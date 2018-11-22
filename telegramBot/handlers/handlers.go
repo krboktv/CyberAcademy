@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
 	"../db"
 	"../telegram"
+	"encoding/json"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Tx struct {
@@ -15,10 +17,21 @@ type User struct {
 	address string `json:"address"`
 }
 
+type SendingObject struct {
+	CurrencyFrom string `json:"currencyFrom"`
+	CurrencyTo string 	`json:"currencyTo"`
+	AmountTo string 	`json:"amountTo"`
+}
+
 func GetTx(c *gin.Context)  {
 	result, err := db.Tx("database").Get([]byte(c.Param("userID")))
+	fmt.Print(result)
+	obj := SendingObject{}
+	if err := json.Unmarshal(result, &obj); err != nil {
+		panic(err)
+	}
 	if err == nil {
-		c.JSON(http.StatusOK, gin.H{"error": nil, "result": result})
+		c.JSON(http.StatusOK, gin.H{"error": nil, "result": obj})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err, "result": nil})
 	}
@@ -27,6 +40,7 @@ func GetTx(c *gin.Context)  {
 func SendTxHash(c *gin.Context) {
 	var transaction Tx
 	if c.ShouldBind(&transaction) == nil {
+		fmt.Print(transaction)
 		telegram.SendMessage(c.Param("userID"), transaction.txHash)
 		c.JSON(http.StatusOK, gin.H{"error": nil, "result": "success"})
 	}

@@ -2,45 +2,42 @@ const BACKEND_URL = "http://localhost:8080";
 let txData = {};
 
 
+
 async function exchange() {
-    const {
-        addressFrom,
-        addressTo,
-        amountFrom,
-        type
-    } = txData;
-
-    const privateKey = document.getElementById('private-key').value();
-
-    let txHash;
-    if (type == 0) {
-        txHash = await swapTokenToToken(privateKey, addressFrom, addressTo, amountFrom);
-    } else if (type == 1) {
-        txHash = await swapEtherToToken(privateKey, addressFrom, addressTo, amountFrom);
-    }
-
-    document.getElementById('tx-hash').innerText = `Transaction Hash: ${txHash}`;
-
-    await query('POST', `${BACKEND_URL}/exchange/${getUserID()}`, JSON.stringify({"txHash": txHash}));
-}
-
-(async function getData() {
-    const result = await query("GET", `${BACKEND_URL}/exchange/${getUserID()}`);
     const {
         currencyFrom,
         currencyTo,
-        addressFrom,
-        addressTo,
+        amountFrom,
+    } = txData;
+    const privateKey = document.getElementById('private-key').value;
+
+    let txHash;
+    if (currencyFrom != "ETH") {
+        txHash = await swapTokenToToken(privateKey, ADDRESS[currencyFrom], ADDRESS[currencyTo], tw(amountFrom));
+    } else {
+        txHash = await swapEtherToToken(privateKey, ADDRESS[currencyTo], tw(amountFrom));
+    }
+    console.log(txHash)
+    document.getElementById('tx-hash').innerText = `Transaction Hash: ${txHash.transactionHash}`;
+
+    await query('POST', `${BACKEND_URL}/exchange/${getUserID()}`, JSON.stringify({"txHash": txHash.transactionHash}));
+}
+
+(async function getData() {
+    const result = (await query("GET", `${BACKEND_URL}/exchange/${getUserID()}`)).result;
+    const {
+        currencyFrom,
+        currencyTo,
         amountTo,
     } = result;
     txData = result;
-
+    console.log(result)
     document.getElementById('token-from').innerText = currencyFrom;
     document.getElementById('token-to').innerText = currencyTo;
-    document.getElementById('token-address-from').innerText = addressFrom;
-    document.getElementById('token-address-to').innerText = addressTo;
+    document.getElementById('token-address-from').innerText = ADDRESS[currencyFrom];
+    document.getElementById('token-address-to').innerText = ADDRESS[currencyTo];
     document.getElementById('token-amount-to').innerText = amountTo;
-
+    console.log(currencyTo)
     const amountFrom = await predictAmount(ADDRESS[currencyFrom], ADDRESS[currencyTo], amountTo);
     txData.amountFrom = amountFrom;
     document.getElementById('token-amount-from').innerText = amountFrom;
@@ -49,7 +46,7 @@ async function exchange() {
 function getUserID() {
     const url = window.location;
     const urlData = parseURL(url);
-    return urlData.create;
+    return urlData.tx;
 }
 
 function parseURL(url) {
@@ -79,6 +76,8 @@ async function query(method, url, data) {
             "Content-Type": "application/json"
         };
     }
+
+    console.log(settings)
 
     return await $.ajax(settings);
 }

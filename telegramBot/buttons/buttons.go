@@ -39,4 +39,14 @@ var (
 	[]tb.InlineButton{SaltToButton},
 	[]tb.InlineButton{ZilToButton},
 	}
+
+
+	ExchangeInlineKeyboard = [][]tb.InlineButton {}
 )
+
+func SetLinkButton(url string) {
+	ExchangeInlineButton := tb.InlineButton{Unique: "exc", Text: "Exchange", URL: url}
+	ExchangeInlineKeyboard = [][]tb.InlineButton{
+		[]tb.InlineButton{ExchangeInlineButton},
+	}
+}

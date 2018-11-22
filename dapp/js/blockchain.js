@@ -2,6 +2,8 @@ const tbn = (x) => new BigNumber(x);
 const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e18).integerValue() : tbn(x).times(1e18).integerValue();
 const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-18).toNumber() : tbn(x).times(1e-18).toNumber();
 
+const web3 =  new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/1u84gV2YFYHHTTnh8uVl'));
+
 async function swapTokenToToken(privateKey, sourceToken, destinationToken, exchangedAmount) {
     const instance = getInstance(ABI.KYBER, ADDRESS.KYBER);
     const transactionData = getCallData(instance, "swapTokenToToken", [destinationToken, exchangedAmount, sourceToken, "0"]);
@@ -15,13 +17,14 @@ async function swapEtherToToken(privateKey, tokenAddress, etherSum) {
 }
 
 async function predictAmount(sourceToken, destinationToken, tokenSum) {
-    const rateFromToken = await getExchangeRate(destinationToken, sourceToken, tokenSum);
+    const rateFromToken = await getExchangeRate(sourceToken, destinationToken, tokenSum);
     const rateFromEther = tbn(1e18).div(rateFromToken);
     return rateFromEther.times(tokenSum).toNumber();
 }
 
 async function getExchangeRate(sourceToken, destinationToken, exchangedAmount) {
     const instance = getInstance(ABI.KYBER, ADDRESS.KYBER);
+    console.log(sourceToken, destinationToken, exchangedAmount)
     const result =  await get(instance, "getExpectedRate", [sourceToken, destinationToken, exchangedAmount]);
     return result.expectedRate;
 }
@@ -38,10 +41,10 @@ async function set(privateKey, receiver, amount, transactionData) {
         value: Number(amount),
         from: userAddress,
         data: transactionData !== undefined ? transactionData : '',
-        gasPrice: 5000000000,
-        gas: 2100000
+        gasPrice: 0x3b9bca00,
+        gas: 210000
     };
-
+    console.log(txParam)
     const privateKeyBuffer = ethereumjs.Buffer.Buffer.from(privateKey.substring(2), 'hex');
 
     const tx = new ethereumjs.Tx(txParam);

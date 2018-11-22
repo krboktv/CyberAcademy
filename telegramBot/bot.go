@@ -19,35 +19,35 @@ func main()  {
 
 
 	b.Handle(&buttons.KncFromButton, func(c *tb.Callback) {
-		h.From(b, c)
+		h.From(b, c, buttons.KncFromButton.Text)
 	})
 	b.Handle(&buttons.EthFromButton, func(c *tb.Callback) {
-		h.From(b, c)
+		h.From(b, c, buttons.EthFromButton.Text)
 	})
 	b.Handle(&buttons.OmgFromButton, func(c *tb.Callback) {
-		h.From(b, c)
+		h.From(b, c, buttons.OmgFromButton.Text)
 	})
 	b.Handle(&buttons.SaltFromButton, func(c *tb.Callback) {
-		h.From(b, c)
+		h.From(b, c, buttons.SaltFromButton.Text)
 	})
 	b.Handle(&buttons.ZilFromButton, func(c *tb.Callback) {
-		h.From(b, c)
+		h.From(b, c, buttons.ZilToButton.Text)
 	})
 
 	b.Handle(&buttons.KncToButton, func(c *tb.Callback) {
-		h.To(b, c)
+		h.To(b, c, buttons.KncToButton.Text)
 	})
 	b.Handle(&buttons.EthToButton, func(c *tb.Callback) {
-		h.To(b, c)
+		h.To(b, c, buttons.EthToButton.Text)
 	})
 	b.Handle(&buttons.OmgToButton, func(c *tb.Callback) {
-		h.To(b, c)
+		h.To(b, c, buttons.OmgToButton.Text)
 	})
 	b.Handle(&buttons.SaltToButton, func(c *tb.Callback) {
-		h.To(b, c)
+		h.To(b, c, buttons.SaltToButton.Text)
 	})
 	b.Handle(&buttons.ZilToButton, func(c *tb.Callback) {
-		h.To(b, c)
+		h.To(b, c, buttons.ZilToButton.Text)
 	})
 
 	if err != nil {
@@ -69,6 +69,10 @@ func main()  {
 		b.Send(m.Sender, "Exchange", &tb.ReplyMarkup{
 			InlineKeyboard:  buttons.FromKeys,
 		})
+	})
+
+	b.Handle("/amount", func(m *tb.Message) {
+		h.SendLink(b, m)
 	})
 
 	b.Start()

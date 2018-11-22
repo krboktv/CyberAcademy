@@ -37,12 +37,3 @@ func TxTo(dbName string) (*leveldb.Table) {
 	}
 	return txTable
 }
-
-func Amount(dbName string) (*leveldb.Table) {
-	db, err := leveldb.Connect(dbName, 16,16,1024)
-	txTable := leveldb.NewTable(db, "amount-")
-	if err != nil {
-		panic(err)
-	}
-	return txTable
-}
